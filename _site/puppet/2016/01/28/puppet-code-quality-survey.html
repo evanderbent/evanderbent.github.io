@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Puppet Code Quality Survey: Results</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://yourdomain.com/puppet/2016/01/28/puppet-code-quality-survey.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Eduard's Blog</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Puppet Code Quality Survey: Results</h1>
+    <p class="post-meta">Jan 28, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <p>The subject of my master’s thesis is code quality in puppet. As a part of our investigation of puppet code quality, we decided to hold a survey under the puppet programming community to ask them about their opinion on code quality. I promised everyone who answered this survey that I would publish the results, which I am doing by means of this post.</p>
+
+<p>For this survey, I approached around 250 recently active puppet programmers on GitHub. The survey lasted from 14 to 24 december. I got 40 responses.
+In the processing of the answers, I added two complete answers from an earlier pilot. This puts the amount of analyzed responses at 42. The survey consisted of a question to indicate the experience of the programmer, and was followed by 5 open questions. I processed the answers by identifying the keywords they mentioned and the concepts they referred to and categorizing the answers accordingly.</p>
+
+<p><img src="/assets/q2.png" alt="this space for rent" /></p>
+
+<p>Looking at the top 5, code quality in puppet is not very different from normal programming languages. Testing, documentation, code style and linting are common to other languages as well. More interesting is the program structure - examples here are proper usage of the Package, Config, Service design pattern, and making use of params.pp. The exec resource is also frequently mentioned, and specific to puppet. Other interesting aspects are whether the program is cross-platform, data is separated from code, and what is done with resources - which kinds are used and what their relations are.</p>
+
+<p><img src="/assets/q3.png" alt="this space for rent" /></p>
+
+<p>The leading bad practice here is the improper usage of exec. Some other puppet-specific bad practices are having a lacking program structure (no PCS / params.pp for instance), hardcoded variables, having too many dependencies (or too little), non-idempotence and having too many or too few parameters. Also failing to use hiera when this is needed is considered a bad practice.</p>
+
+<p><img src="/assets/q4.png" alt="this space for rent" /></p>
+
+<p>The answers to this question are not specifically related to puppet code quality. The most mentioned metric here is activity. After this comes documentation, popularity and the author. The documentation here differs from Q2 - specific examples of documentation mentioned here are parameter documentation, and whether the documentation mentions use cases.</p>
+
+<p><img src="/assets/q5.png" alt="this space for rent" /></p>
+
+<p>An explanation of the above chart: Hiera: xyz means that xyz goes into hiera. Puppet: abc means that abc goes into puppet.</p>
+
+<p>A lot of slightly different answers were given to this question. The gist of it is this: In hiera goes varying data: things that are site-specific, node-specific, company-specific, non-generic, but also data that changes a lot. Secrets (such as passwords, ssh, &amp;c.) go into hiera as well. To finish this list I would add data that overwrites parameters. What do users put into puppet code? Distro-specific information, static data, global variables and parameter defaults.</p>
+
+<p>Respondent #11 summarizes the above quite well: “A class should usually “just work” when using something like “include <classname>". Data necessary to make it work should be included as defaults, data that is adjusting for non-generic use case should be in Hiera."</classname></p>
+
+<p>What is interesting in this question is that there are a lot of very different ways of deciding what to put into hiera, and a lot of respondents have reported their way of deciding, which sometimes can be quite unique. The differences in answering this question most likely indicate a lack of consensus among respondents about what data to put into hiera.</p>
+
+<p><img src="/assets/q6.png" alt="this space for rent" /></p>
+
+<p>Answers to this question were quite unique and hard to analyze/group, but we managed to figure it out. Where needed I will explain the categories. Most reported problems are related to puppet design. The problems in this category are related to the way that puppet is designed. Examples are snowflake servers, the limitations on a single node, and nondeterminism. After that comes third party modules: “We don’t have many problems. The biggest problem we’ve run into is relying on a third-party module from puppet forge or puppet-labs.    We’ve eventually had to either:  - make forks of some modules to include some of the features we need (or fix a bug)  - switch to another module”. The poor quality of third-party modules was also mentioned. Testing was also mentioned quite often, especially writing good tests. The puppet documentation was mentioned - especially for the types and providers API. We assigned all answers that wanted a feature added to puppet that was not there to Missing Functionality. The quality of the error messages (both puppet &amp; ruby based errors) was mentioned. I’d like to conclude with the lack of best practices. One respondent mentioned a lack of best practices for the toolset, another mentioned a lack of a best practice for module organisation. I guess what most people have is a /modules folder, but if that is filled with over 200 modules, that can get quite full and hard to navigate.</p>
+
+<p>I’d like to thank everyone who filled in my survey, you’ve been a big help with my research.</p>
+
+<p>This is an initial version of the results, a more detailed version will be published in my master’s thesis. If you have any questions or comments, feel free to leave a comment below.</p>
+
+<p>If you read up to here, you must be interested in my research topic of Puppet code quality. If you are a Puppet developer, you might be able to help me in the next step in my research, where I will build a quality evaluation model and validate it with experts and case studies. Contact me if you can help me out!</p>
+
+
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'evanderbent'; // required: replace example with your forum shortname
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eduard's Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Eduard's Blog</li>
+          <li><a href="mailto:eduardvdbent@gmail.com">eduardvdbent@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/evanderbent">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">evanderbent</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text"></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
